@@ -9,7 +9,7 @@ System Requirements:
 
 
 Installation Guide
-
+- Follow standard steps for Matlab installation -- this typically takes 1-2 hours
 
 Demo
 
