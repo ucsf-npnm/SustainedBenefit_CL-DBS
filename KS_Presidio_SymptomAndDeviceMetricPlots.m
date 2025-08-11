@@ -8,21 +8,20 @@ patientID = 'PR01';
     stimTurnOn,stimTurnOff,detectorChangeDates,chNames,enrollment,stage2date_start,...
     stage2date_end,stage3date_start,ltfudate_start,patientColor] = PresidioPatientData(patientID);
 
-load('PR01_ComprehensiveMADRS_07032025.mat')
+load('PR01_ComprehensiveMADRS.mat')
 MADRS = PR01_MADRS;
 
-redcapFile = 'PR01_AmbulatoryRedcap_07032025.csv';
-histogramHourly = 'Histogram_Hourly_07032025.csv';
+redcapFile = 'PR01_AmbulatoryRedcap.csv';
+histogramHourly = 'Histogram_Hourly.csv';
 
 resetTime = 6; % In PST [should start getting stim within 7am bin]
 
-crossover1Dates = []; % Removed
-crossover2Dates = []; % Removed
+crossover1Dates = datetime('2021-06-16'):caldays(1):datetime('2021-08-13');
+crossover2Dates = datetime('2022-04-25'):caldays(1):datetime('2022-05-06');
 excludeDates_crossoverPeriod = [crossover1Dates crossover2Dates];
-closedLoopEnabledDate = []; % Removed
+closedLoopEnabledDate = datetime('2020-08-13');
 excludeDatesBeforeStimOn = stage2date_start:caldays(1):closedLoopEnabledDate; % Exclude dates before stim was turned on
-plotDetectors = [1,2];
-stage1date_start = []; % Removed
+stage1date_start = datetime('2019-10-23');
 stage1date_start_relative = days(stage1date_start - enrollment);
 
 %%
