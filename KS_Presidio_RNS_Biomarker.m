@@ -8,22 +8,19 @@ patientID = 'PR01';
 
 [histogramHourly,redcapDataFile,ecogCatalog,studyVisitDates,stimChangeDates,...
     stimTurnOn,stimTurnOff,detectorChangeDates,chNames,enrollment,stage2date_start,...
-    stage2date_end,stage3date_start,ltfudate_start,patientColor] = PresidioPatientData(patientID);
+    stage2date_end,stage3date_start,ltfudate_start,patientColor] = PresidioPatientData_PR01(patientID);
 
 endDateForBiomarkerAnalysis = datetime('now');
-crossover1Dates = []; % Removed 
-crossover2Dates = []; % Removed 
+crossover1Dates = datetime('2021-06-16'):caldays(1):datetime('2021-08-13');
+crossover2Dates = datetime('2022-04-25'):caldays(1):datetime('2022-05-06');
 excludeDates_crossoverPeriod = [crossover1Dates crossover2Dates];
 
-savedWavelet = [pwd filesep 'PR01_SelectData_07162025.mat'];
+savedWavelet = 'PR01_SelectData';
 
 %%
-% Import ECoG Catalog
-catalog = readtable(ecogCatalog);
-
-% Extract channel names
-chNames = {catalog.Ch1Name{10}, catalog.Ch2Name{10}, catalog.Ch3Name{10}, catalog.Ch4Name{10}};
-numChans = 4;
+% Channel names
+chNames = {'VCVS1 - VCVS2','VCVS3 - VCVS4','Amyg1 - Amyg2','Amyg3 - Amyg4'};
+numChans = length(chNames);
 
 %%
 % Wavelet
@@ -213,6 +210,9 @@ end
 
 calculationWindow = 180; % days
 slidingWindow = 7; % days
+
+startDate = firstDate_relative;
+endDate = allTimestamps_relative(end);
 
 clear allR_bands allp_bands slidingIndices
 dateCounter = 1;
