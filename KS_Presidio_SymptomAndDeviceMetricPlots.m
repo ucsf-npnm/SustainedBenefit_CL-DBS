@@ -12,7 +12,7 @@ load('PR01_ComprehensiveMADRS.mat')
 MADRS = PR01_MADRS;
 
 redcapFile = 'PR01_AmbulatoryRedcap.csv';
-histogramHourly = 'Histogram_Hourly.csv';
+histogramHourly = 'PR01_Histogram_Hourly.csv';
 
 resetTime = 6; % In PST [should start getting stim within 7am bin]
 
