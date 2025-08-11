@@ -7,22 +7,21 @@ patientID = 'PR01';
     stimTurnOn,stimTurnOff,detectorChangeDates,chNames,enrollment,stage2date_start,...
     stage2date_end,stage3date_start,ltfudate_start,patientColor] = PresidioPatientData(patientID);
 
-load('PR01_ComprehensiveMADRS_07032025.mat')
-
+load('PR01_ComprehensiveMADRS.mat')
 clinicianScales = PR01_MADRS;
 
 stimChangeDates_relative = days(stimChangeDates - enrollment);
 stimTurnOn_relative = days(stimTurnOn - enrollment);
 stimTurnOff_relative = days(stimTurnOff - enrollment);
 
-load([pwd filesep patientID '_SelectMagnetData_07162025.mat'])
-longitudinalSpectrogramFile = [patientID '_LongitudinalSpectrograms_07162025.mat'];
+load('PR01_SelectMagnetData.mat')
+longitudinalSpectrogramFile = 'PR01_LongitudinalSpectrograms.mat';
 
 startAnalysisDate = enrollment;
 endAnalysisDate = datetime('now');
 
-crossover1Dates = []; % Removed
-crossover2Dates = []; % Removed
+crossover1Dates = datetime('2021-06-16'):caldays(1):datetime('2021-08-13');
+crossover2Dates = datetime('2022-04-25'):caldays(1):datetime('2022-05-06');
 excludeDates_crossoverPeriod = [crossover1Dates crossover2Dates];
 
 %%
