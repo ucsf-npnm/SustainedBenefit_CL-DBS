@@ -6,7 +6,7 @@ patientID = 'PR01';
 
 [histogramHourly,redcapDataFile,ecogCatalog,studyVisitDates,stimChangeDates,...
     stimTurnOn,stimTurnOff,detectorChangeDates,chNames,enrollment,stage2date_start,...
-    stage2date_end,stage3date_start,ltfudate_start,patientColor] = PresidioPatientData(patientID);
+    stage2date_end,stage3date_start,ltfudate_start,patientColor] = PresidioPatientData_PR01(patientID);
 
 load('PR01_ComprehensiveMADRS.mat')
 MADRS = PR01_MADRS;

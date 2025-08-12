@@ -15,7 +15,7 @@ crossover1Dates = datetime('2021-06-16'):caldays(1):datetime('2021-08-13');
 crossover2Dates = datetime('2022-04-25'):caldays(1):datetime('2022-05-06');
 excludeDates_crossoverPeriod = [crossover1Dates crossover2Dates];
 
-savedWavelet = 'PR01_SelectData';
+savedWavelet = 'PR01_SelectData.mat';
 
 %%
 % Channel names
