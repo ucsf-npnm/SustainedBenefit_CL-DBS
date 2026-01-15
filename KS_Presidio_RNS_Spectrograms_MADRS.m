@@ -18,34 +18,12 @@ load('PR01_SelectMagnetData.mat')
 longitudinalSpectrogramFile = 'PR01_LongitudinalSpectrograms.mat';
 
 startAnalysisDate = enrollment;
-endAnalysisDate = datetime('now');
 
-crossover1Dates = datetime('2021-06-16'):caldays(1):datetime('2021-08-13');
-crossover2Dates = datetime('2022-04-25'):caldays(1):datetime('2022-05-06');
-excludeDates_crossoverPeriod = [crossover1Dates crossover2Dates];
-
-%%
-% Load Redcap data
-redcapData = readtable(redcapDataFile);
-
-%%
-% Remove visit days from redcap data and plot scores
-% Indices corresponding to start and end dates for analysis
-indices_surveys = intersect(find(redcapData.completion_pt_timestamp >= startAnalysisDate),...
-    find(redcapData.completion_pt_timestamp <= endAnalysisDate));
-
-% Indices of study visit dates
-redcap_allDates = datetime(redcapData.completion_pt_timestamp,...
-    'Format','dd-MMM-uuuu');
-redcapAllDates_string = string(redcap_allDates);
-indicesToKeep = find(~ismember(redcapAllDates_string,string(studyVisitDates)));
-
-% Indices to plot
-indicesToPlot = intersect(indices_surveys,indicesToKeep);
-
-selectTime = redcapData.completion_pt_timestamp(indicesToPlot);
-selectData = redcapData(indicesToPlot,:);
-
+if strcmp(patientID,'PR01')
+    crossover1Dates = datetime('2021-06-16'):caldays(1):datetime('2021-08-13');
+    crossover2Dates = datetime('2022-04-25'):caldays(1):datetime('2022-05-06');
+    excludeDates_crossoverPeriod = [crossover1Dates crossover2Dates];
+end
 %%
 % Wavelet
 Fs = 250;
@@ -122,13 +100,11 @@ xlabel('Days of Trial Participation')
 % Band power / relative power for all magnet recordings
 
 % Average power within canonical frequency bands
-delta = [1 4];
 theta = [4 9] ;
 alpha = [9 13];
 beta = [13 30];
 lowGamma = [31 70];
 highGamma = [71 125];
-allGamma = [31 125];
 
 allBands = {theta, alpha, beta, lowGamma, highGamma};
 bandNames = {'Theta','Alpha','Beta','LowGamma','HighGamma'};
@@ -203,7 +179,11 @@ MADRS_relativeTimestamps = days(MADRS_timestamps - enrollment);
 
 % Subselect MADRS scores from Stage 2 and beyond (when there is
 % corresponding neural data)
-selectIndices = find(MADRS_relativeTimestamps > days(stage2date_start - enrollment));
+
+% Starting to look at biomarker 60 days after implant (to
+% allow for electrode stabilization)
+daysToExclude = 60;
+selectIndices = find(MADRS_relativeTimestamps > days(stage2date_start + daysToExclude - enrollment));
 selectMADRS_relativeTimestamps = MADRS_relativeTimestamps(selectIndices);
 selectMADRS_total = MADRS_total(selectIndices);
 
@@ -238,7 +218,7 @@ for iDays = 1:length(selectDaysToAverage)
             if (floor(scoreDate)-firstDay_allRecordings) < size(neuralDataToPlot,2) && (scoreDate <= dateRangeEnd)
                 clear currentCalc
                 currentCalc = squeeze(nanmean(neuralDataToPlot(selectChan,floor(scoreDate)-firstDay_allRecordings-currentDaysToAverage...
-                    :floor(scoreDate)-firstDay_allRecordings,:),2));
+                    :floor(scoreDate)-firstDay_allRecordings-1,:),2));
                 if sum(sum(~isnan(currentCalc)))
                     selectSpectrum(counter,:) = currentCalc;
                     counter = counter + 1;
@@ -247,7 +227,7 @@ for iDays = 1:length(selectDaysToAverage)
             end
         end
     end
-    selectMADRS_total_withSpectrum = MADRS_total(indicesToTest);
+    selectMADRS_total_withSpectrum = selectMADRS_total(indicesToTest);
     length(indicesToTest)
 
     % Keeping full FArray without binning
@@ -291,6 +271,10 @@ colormap jet
 
 selectDaysToAverage = [1 7 14 21 28];
 
+
+dateRangeStart = stage2date_start_relative;
+dateRangeEnd = days(datetime('now') - enrollment);
+
 % dateRangeStart = stage2date_start_relative;
 % dateRangeEnd = stage2date_end_relative;
 
@@ -300,8 +284,6 @@ selectDaysToAverage = [1 7 14 21 28];
 % dateRangeStart = ltfudate_start_relative;
 % dateRangeEnd = days(datetime('now') - enrollment);
 
-dateRangeStart = stage2date_start_relative;
-dateRangeEnd = days(datetime('now') - enrollment);
 
 clear neuralDataToPlot
 neuralDataToPlot = longitudinalSpectrum_byDays_bandPower_relativeBandPower;
@@ -321,7 +303,7 @@ for iDays = 1:length(selectDaysToAverage)
             if (floor(scoreDate)-firstDay_allRecordings) < size(neuralDataToPlot,1) && (scoreDate <= dateRangeEnd)
                 clear currentCalc
                 currentCalc = squeeze(nanmean(neuralDataToPlot(floor(scoreDate)-firstDay_allRecordings-currentDaysToAverage...
-                    :floor(scoreDate)-firstDay_allRecordings,selectChan,:),1));
+                    :floor(scoreDate)-firstDay_allRecordings-1,selectChan,:),1));
                 if sum(sum(~isnan(currentCalc)))
                     selectSpectrum(counter,:) = currentCalc;
                     counter = counter + 1;
@@ -330,7 +312,7 @@ for iDays = 1:length(selectDaysToAverage)
             end
         end
     end
-    selectMADRS_total_withSpectrum = MADRS_total(indicesToTest);
+    selectMADRS_total_withSpectrum = selectMADRS_total(indicesToTest);
     length(indicesToTest)
 
     for iBand = 1:length(allBands)
