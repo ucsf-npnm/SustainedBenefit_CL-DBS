@@ -16,7 +16,6 @@ crossover2Dates = datetime('2022-04-25'):caldays(1):datetime('2022-05-06');
 excludeDates_crossoverPeriod = [crossover1Dates crossover2Dates];
 
 savedWavelet = 'PR01_SelectData.mat';
-
 %%
 % Channel names
 chNames = {'VCVS1 - VCVS2','VCVS3 - VCVS4','Amyg1 - Amyg2','Amyg3 - Amyg4'};
@@ -101,7 +100,7 @@ correlationType = 'Spearman'; % Spearman or Pearson
 % Calculate sliding window correlation of symptom vs band-averaged RAW power
 
 calculationWindow = 180; % days
-slidingWindow = 30; % days
+slidingWindow = 7; % days
 
 startDate = firstDate_relative;
 endDate = allTimestamps_relative(end);
@@ -143,9 +142,11 @@ end
 % Plot sliding window correlation of symptom vs band-averaged RAW power
 turboWithWhite = [[1 1 1]; turbo];
 
-xTickLabels = firstDate_relative:slidingWindow:floor(endDate);
+% Using date in the middle of calculation window for x-axis
+xTickLabels = firstDate_relative + calculationWindow/2:slidingWindow:floor(endDate) + calculationWindow/2;
+
 iMetric = 2; % 1 = VAS-D, 2 = HAMD-6
-selectChan = 4; % Amyg 3 - Amyg 4
+selectChan = 4; % 4 = Amyg 3 - Amyg 4
 
 clear toPlotR toPlotP
 figure
@@ -250,9 +251,11 @@ end
 %%
 % Plot sliding window correlation of symptom vs band-averaged RELATIVE power
 
-xTickLabels = firstDate_relative:slidingWindow:floor(endDate);
-iMetric = 2; % 1 = VAS-D, 2 = HAMD-6
-selectChan = 4; % Amyg 3 - Amyg 4
+% Using date in the middle of calculation window for x-axis
+xTickLabels = firstDate_relative + calculationWindow/2:slidingWindow:floor(endDate) + calculationWindow/2;
+
+iMetric = 1; % 1 = VAS-D, 2 = HAMD-6
+selectChan = 4; % 4 = Amyg 3 - Amyg 4
 
 clear toPlotR toPlotP
 figure
