@@ -2,7 +2,7 @@ Code to accompany manuscript "Sustained benefit of personalized closed-loop deep
 
 # System Requirements:
 
-- Matlab 2021b
+- Matlab 2025b
 - ClusterBorder function for Matlab from https://www.mathworks.com/matlabcentral/answers/769877-draw-lines-around-specific-regions-in-imagesc-plot
 - Python 3.10.4
     - numpy==2.2.5
@@ -23,11 +23,11 @@ Code to accompany manuscript "Sustained benefit of personalized closed-loop deep
     - Uses input data `PR01_ComprehensiveMADRS.mat`, `PR01_AmbulatoryRedcap.csv`, `PR01_Histogram_Hourly.csv`
     - Uses function `PresidioPatientData_PR01`
 
-- KS_Presidio_RNS_Spectrograms_MADRS.m does calculations and produces figures for manuscript Figure 2B, C, D; Extended Figure 4; Extended Figure 5
+- KS_Presidio_RNS_Spectrograms_MADRS.m does calculations and produces figures for manuscript Figure 2B, C, D (right); Extended Figure 4A; Extended Figure 5
     - Uses input data `PR01_ComprehensiveMADRS.mat`, `PR01_SelectMagnetData.mat`, and `PR01_LongitudinalSpectrograms.mat`
     - Uses function `PresidioPatientData_PR01`
 
-- KS_Presidio_RNS_Biomarker.m does calculations and produces figures for manuscript Figure 2E; Extended Figure 4B
+- KS_Presidio_RNS_Biomarker.m does calculations and produces figures for manuscript Figure 2D (left), E; Extended Figure 4B; Extended Figure 6
     - Uses input data `PR01_SelectData.mat`
     - Uses function `PresidioPatientData_PR01`
 
